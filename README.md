@@ -36,7 +36,9 @@ Screenshot of the:
 
 
 ## Credits:
-1.
+1. https://masteringjs.io/tutorials/mongoose/unique#:~:text=For%20example%2C%20below%20is%20how,('User'%2C%20userSchema)%3B (Help with Mongoose options)
+
+2. https://mongoosejs.com/docs/schematypes.html#strings (Help with mongoose)
 
 ## Questions
 Feel free to contact me at nguyen_dinh282@yahoo.com for additional information.  
