@@ -1,4 +1,4 @@
-const { Thought } = require('../models');
+const { Thought, User } = require('../models');
 
 module.exports = {
   // Get all thoughts
@@ -29,6 +29,18 @@ module.exports = {
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
+
+      const user = await User.findOneAndUpdate(
+        { _id: req.body.userId }, // userId that is provided in the request body
+        { $push: { thoughts: thought._id } }, // Push the thought's _id to the user's thoughts array
+        { new: true } // To return the updated user document
+      );
+
+      // This is to handle event of no user is found with the given userId,
+      if (!user) {
+        return res.status(404).json({ message: 'No user found with that ID' });
+      }
+
       res.json(thought);
     } catch (err) {
       console.log(err);
