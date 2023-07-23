@@ -64,9 +64,10 @@ module.exports = {
 
       if (!user) {
         res.status(404).json({ message: 'No user with this id!' });
+        return
       }
 
-      res.json(course);
+      res.json(user);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -74,13 +75,11 @@ module.exports = {
 
 // Add a friend to a user
 async addFriend(req, res) {
-    console.log('You are adding a friend');
-    console.log(req.body);
-
+    
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $addToSet: { friends: req.body } },
+        { $addToSet: { friends: req.params.friendId } },
         { runValidators: true, new: true }
       );
 
@@ -91,6 +90,7 @@ async addFriend(req, res) {
       }
 
       res.json(user);
+      console.log('You added a friend');
     } catch (err) {
       res.status(500).json(err);
     }
@@ -100,7 +100,7 @@ async addFriend(req, res) {
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $pull: { friend: { friendId: req.params.friendId } } },
+        { $pull: { friends: req.params.friendId } },
         { runValidators: true, new: true }
       );
 
@@ -109,7 +109,7 @@ async addFriend(req, res) {
           .status(404)
           .json({ message: 'No user found with that ID :(' });
       }
-
+      console.log('You removed a friend');
       res.json(user);
     } catch (err) {
       res.status(500).json(err);

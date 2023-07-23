@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const reactionSchema = require('./Reaction');
 
 const thoughtSchema = new Schema(
   {
@@ -8,24 +9,25 @@ const thoughtSchema = new Schema(
       maxlength: 280,
       minlength: 1,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
     username: {
       type: String,
       required: true,  
     },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
     reactions: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Reaction',
-        }
-    ]
+        reactionSchema
+    ],
   },
   {
     toJSON: {
       getters: true,
+      virtuals: true,
+      transform: function (doc, ret) {
+        ret.createdAt = doc.createdAt.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+      },
     },
     id: false,
   }
@@ -35,12 +37,6 @@ const thoughtSchema = new Schema(
 thoughtSchema.virtual('reactionCount').get(function () {
     return this.reactions.length;
   });
-
-// Create a virtual property 'formattedCreatedAt' that formats timestamp on query.
-thoughtSchema.virtual('formattedCreatedAt').get(function () {
-    return this.createdAt.toLocaleString(); 
-  });
-
 
 // Initialize the Comment model
 const Thought = model('thought', thoughtSchema);  

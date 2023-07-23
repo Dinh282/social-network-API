@@ -23,14 +23,14 @@ const reactionSchema = new Schema(
   {
     toJSON: {
       getters: true,
+      transform: function (doc, ret) {
+        ret.createdAt = doc.createdAt.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+      },
     },
     id: false,
   }
 );
 
-// Getter method to format the createdAt timestamp on query
-reactionSchema.virtual('formattedCreatedAt').get(function () {
-  return this.createdAt.toLocaleString();
-});
+
 
 module.exports = reactionSchema;
