@@ -52,6 +52,10 @@ open it with VS Code.
 
 
 
+https://github.com/Dinh282/social-network-API/assets/112836220/1271c214-1773-409b-8ffc-2582af36f4a5
+
+
+
 
 
 The following are screenshots of some of the routes tested with Insomnia:
