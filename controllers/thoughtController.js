@@ -50,12 +50,15 @@ module.exports = {
   // Delete a thought
   async deleteThought(req, res) {
     try {
-      const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
-
-      if (!thought) {
-        res.status(404).json({ message: 'No thought with that ID' });
+      const deletedThought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
+  
+      if (!deletedThought) {
+        return res.status(404).json({ message: 'No thought with that ID' });
       }
-
+  
+      // Here we remove the deletedThought._id from the thoughts array of all users
+      await User.updateMany({}, { $pull: { thoughts: deletedThought._id } });
+  
       res.json({ message: 'Thought was deleted!' });
     } catch (err) {
       res.status(500).json(err);
